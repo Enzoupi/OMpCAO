@@ -7,8 +7,13 @@
 #endif
 
 double RandMatMult(int n, int m, int p)
+/* Function to test the efficiency of parallelism : allocate and initialize two random matrix
+of size n*m and m*p and store the result in a third matrix of size n*p (also allocated here)
+
+output :
+float time_spent : time necessary to perform (only) the multplication
+*/
 {
-	clock_t begin = clock();
 	double *aspace = new double[m * n];
 	double **M1 = new double *[m];
 #pragma omp parallel for schedule(dynamic)
@@ -101,6 +106,13 @@ double RandMatMult(int n, int m, int p)
 }
 
 double RandMatMultDynamic(int n, int m, int p, int chunk)
+/* Function to test the efficiency of parallelism : allocate and initialize two random matrix
+of size _n*_m and _m*_p and store the result in a third matrix of size _n*_p (also allocated here)
+Use a dynamic scheduling and a chunk size of size _chunk
+
+output :
+float time_spent : time necessary to perform (only) the multplication
+*/
 {
 	clock_t begin = clock();
 	double *aspace = new double[m * n];
@@ -195,6 +207,12 @@ double RandMatMultDynamic(int n, int m, int p, int chunk)
 }
 
 double RandMatMultStatic(int n, int m, int p, int chunk)
+/* Function to test the efficiency of parallelism : allocate and initialize two random matrix
+of size _n*_m and _m*_p and store the result in a third matrix of size _n*_p (also allocated here)
+Use a static scheduling and a chunk size of size _chunk
+
+output :
+float time_spent : time necessary to perform (only) the multplication */
 {
 	clock_t begin = clock();
 	double *aspace = new double[m * n];
@@ -310,7 +328,7 @@ int main()
 		//Loop on matrix size
 		for (int param = 100; param < 905; param += 100)
 		{
-			printf("Matrix size : %d\n",param);
+			printf("Matrix size : %d\n", param);
 			fprintf(foutput, "%d ", param);
 			//Loop on thread(s) number
 			for (int nbcpu = 1; nbcpu <= maxthreads; nbcpu++)
@@ -334,7 +352,7 @@ int main()
 		omp_set_num_threads(2);
 		for (int i = 1; i <= sizemat / 2; i = i + 10)
 		{
-			printf("chunk size = %d",i);
+			printf("chunk size = %d\n", i);
 			fprintf(fo2, "%d ", i);
 			double time_static = RandMatMultStatic(sizemat, sizemat, sizemat, i);
 			double time_dynamic = RandMatMultDynamic(sizemat, sizemat, sizemat, i);

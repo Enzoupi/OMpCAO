@@ -8,6 +8,7 @@
 #endif
 
 int cmbpremier_s(int n)
+/* Fonction qui retourne le nombre de nombre premiers compris entre 0 et _n*/
 {
     int nbpremier = 2;
 #pragma omp parallel for schedule(static) reduction(+ : nbpremier)
@@ -34,6 +35,7 @@ int cmbpremier_s(int n)
 }
 
 int cmbpremier_s(int n, int chunksize)
+/* Fonction qui retourne le nombre de nombre premiers compris entre 0 et _n*/
 {
     int nbpremier = 2;
 #pragma omp parallel for schedule(static, chunksize) reduction(+ : nbpremier)
@@ -60,6 +62,7 @@ int cmbpremier_s(int n, int chunksize)
 }
 
 int cmbpremier_d(int n)
+/* Fonction qui retourne le nombre de nombre premiers compris entre 0 et _n*/
 {
     int nbpremier = 2;
 #pragma omp parallel for schedule(dynamic) reduction(+ : nbpremier)
@@ -86,6 +89,7 @@ int cmbpremier_d(int n)
 }
 
 int cmbpremier_d(int n, int chunksize)
+/* Fonction qui retourne le nombre de nombre premiers compris entre 0 et _n*/
 {
     int nbpremier = 2;
 #pragma omp parallel for schedule(dynamic, chunksize) reduction(+ : nbpremier)
@@ -158,8 +162,9 @@ int main()
     if (TEST_SCHEDULE)
     {
         omp_set_num_threads(maxthreads);
-        for (int chunksize = 1; 50; chunksize = chunksize + 1)
+        for (int chunksize = 1; chunksize < 50; chunksize = chunksize + 2)
         {
+            printf("Chunksize = %d\n",chunksize);
             //static
             double t0 = omp_get_wtime();
             cmbpremier_s(parameter, chunksize);
